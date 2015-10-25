@@ -1,0 +1,76 @@
+objdump -d firstporg.out  | grep -A20 main.: #this will find the main function in the diassembled output the -A20 will only display 20 lines after the regular expression main.:
+# as an option to see intel syntax use -M intel
+#all computer processing is about move memory around,perform some sort of basic math or interrrupt the porcessor to get it to do sth.seems simple ehh :)
+
+
+gdb -q ./firstprog
+break main 
+run
+info registers [register name,optional] or i r eip
+
+gdb -q 
+set dis intel
+or
+echo "set dis intel" > ~/.gdbinit
+
+clang -g firstprog.c -o firstprog #then we can go to gdb -q ./firstprog then list to see source code
+
+#in gdb
+disassemble main# to see the well dehhhhhhhhhh
+
+i r eip
+#then we can use 
+i to display the exact code at that address
+o Display in octal.
+x Display in hexadecimal.
+u Display in unsigned, standard base-10 decimal.
+t Display in binary
+
+x/o 0x8048384 #will give us to examine what the 0x8048384 will points to or simply its value.the pointer war
+
+A number can also be prepended to the format of the examine command to examine multiple units at the target address.
+(gdb) x/2x $eip
+0x8048384 <main+16>:    0x00fc45c7     0x83000000
+(gdb) x/12x $eip
+0x8048384 <main+16>:    0x00fc45c7     0x83000000     0x7e09fc7d     0xc713eb02
+0x8048394 <main+32>:    0x84842404     0x01e80804     0x8dffffff     0x00fffc45
+0x80483a4 <main+48>:    0xc3c9e5eb     0x90909090     0x90909090     0x5de58955
+
+
+The default size of a single unit is a four-byte unit called a word. The size of the display units for the examine command can be changed by adding a size letter to the end of the format letter. The valid size letters are as follows:
+b A single byte
+h A halfword, which is two bytes in size
+w A word, which is four bytes in size
+g A giant, which is eight bytes in size
+
+
+This is slightly confusing, because sometimes the term word also refers to 2-byte values. In this case a double word or DWORD refers to a 4-byte value. In this book, words and DWORDs both refer to 4-byte values. If I’m talking about a 2-byte value, I’ll call it a short or a halfword. The following GDB output shows memory displayed in various sizes.
+(gdb) x/8xb $eip
+0x8048384 <main+16>:    0xc7    0x45    0xfc    0x00    0x00    0x00    0x00    0x83
+(gdb) x/8xh $eip
+0x8048384 <main+16>:    0x45c7  0x00fc  0x0000  0x8300  0xfc7d  0x7e09  0xeb02  0xc713
+(gdb) x/8xw $eip
+0x8048384 <main+16>:    0x00fc45c7      0x83000000      0x7e09fc7d      0xc713eb02
+0x8048394 <main+32>:    0x84842404      0x01e80804      0x8dffffff      0x00fffc45 
+
+******************************************************************************
+
+
+
+
+gdb) i r ebp
+ebp            0xbffff808       0xbffff808
+(gdb) x/4xb $ebp - 4
+0xbffff804:     0xc0    0x83    0x04    0x08
+(gdb) x/4xb 0xbffff804
+0xbffff804:     0xc0    0x83    0x04    0x08
+(gdb) print $ebp - 4
+$1 = (void *) 0xbffff804
+(gdb) x/4xb $1
+0xbffff804:     0xc0    0x83    0x04    0x08
+(gdb) x/xw $1
+0xbffff804:     0x080483c0
+(gdb):w
+
+(gdb): nexti#to go to the next instruction and also it shows the source code to know where you are
+
